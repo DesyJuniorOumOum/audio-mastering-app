@@ -81,8 +81,8 @@ export default function FileUploader() {
                         <rect x="89" y="8" width="3" height="24" rx="1.5" fill="var(--primary)" opacity="0.8" />
                         <defs>
                             <linearGradient id="wave-gradient" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" stop-color="var(--accent)" />
-                                <stop offset="100%" stop-color="var(--primary)" />
+                                <stop offset="0%" stopColor="var(--accent)" />
+                                <stop offset="100%" stopColor="var(--primary)" />
                             </linearGradient>
                         </defs>
                     </svg>

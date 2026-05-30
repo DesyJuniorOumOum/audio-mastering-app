@@ -1,7 +1,7 @@
 // src/context/MasteringContext.jsx
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { startMastering, checkMasteringStatus, downloadAudioFile } from '../services/auphonicApi';
+import { startMastering, checkMasteringStatus, getAuthenticatedUrl } from '../services/auphonicApi';
 
 const MasteringContext = createContext(null);
 
@@ -53,9 +53,9 @@ export function MasteringProvider({ children }) {
                 if (productionData.status_string === 'Done') {
                     clearInterval(intervalId);
                     const rawUrl = productionData.output_files[0].download_url;
-                    const localAudioUrl = await downloadAudioFile(rawUrl);
+                    const authenticatedUrl = getAuthenticatedUrl(rawUrl);
 
-                    setResultUrl(localAudioUrl);
+                    setResultUrl(authenticatedUrl);
                     setStatus("done");
                 } else if (productionData.status_string === 'Error') {
                     clearInterval(intervalId);

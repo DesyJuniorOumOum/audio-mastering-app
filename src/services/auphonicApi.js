@@ -52,14 +52,11 @@ export const checkMasteringStatus = async (uuid) => {
     }
 };
 
-// Fonction pour récupérer le fichier final de manière sécurisée (contournement CORS/Auth)
-export const downloadAudioFile = async (downloadUrl) => {
-    const response = await fetch(downloadUrl, {
-        headers: {
-            'Authorization': `Bearer ${API_KEY}`
-        }
-    });
-    const blob = await response.blob();
-    // Crée une URL locale temporaire lisible par la balise <audio> de React
-    return URL.createObjectURL(blob);
+// Utiliser le paramètre bearer_token officiel de l'API Auphonic pour les requêtes URL (comme <audio>) afin d'éviter les restrictions de credentials basiques de Chrome et contourner CORS
+export const getAuthenticatedUrl = (downloadUrl) => {
+    if (!API_KEY || !downloadUrl) return downloadUrl;
+    
+    // Déterminer s'il faut utiliser ? ou & selon la présence de paramètres existants
+    const separator = downloadUrl.includes('?') ? '&' : '?';
+    return `${downloadUrl}${separator}bearer_token=${API_KEY}`;
 };
