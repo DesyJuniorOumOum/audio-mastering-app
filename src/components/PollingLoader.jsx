@@ -41,7 +41,7 @@ export default function PollingLoader() {
                 ) : (
                     <h3>{t('loadingMastering')}</h3>
                 )}
-                {taskId && <span className="task-id">{t('taskLabel')}{taskId.substring(0, 18)}...</span>}
+                {taskId && <span className="task-id">{t('taskLabel')}{String(taskId).substring(0, 18)}...</span>}
             </div>
 
             {/* Composant atomique de checklist réutilisable */}

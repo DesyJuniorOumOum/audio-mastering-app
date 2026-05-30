@@ -1,7 +1,7 @@
 // src/context/MasteringContext.jsx
 import { createContext, useContext, useState, useEffect } from 'react';
 import { useTranslation } from 'react-i18next';
-import { startMastering, checkMasteringStatus, getAuthenticatedUrl } from '../services/auphonicApi';
+import { startMastering, checkMasteringStatus, getAuthenticatedUrl } from '../services/aiMasteringApi';
 
 const MasteringContext = createContext(null);
 
@@ -12,6 +12,11 @@ export function MasteringProvider({ children }) {
     const [taskId, setTaskId] = useState(null);
     const [resultUrl, setResultUrl] = useState(null);
     const [originalUrl, setOriginalUrl] = useState(null);
+
+    // Nouveaux états de contrôle de la Console Spatiale IA
+    const [preset, setPreset] = useState("general");
+    const [targetLoudness, setTargetLoudness] = useState(-14);
+    const [masteringLevel, setMasteringLevel] = useState(0.5);
 
     // Gérer l'URL locale du fichier d'origine pour la comparaison A/B
     useEffect(() => {
@@ -26,13 +31,13 @@ export function MasteringProvider({ children }) {
         }
     }, [file]);
 
-    // Gérer l'upload de fichier
+    // Gérer l'upload de fichier avec options dynamiques
     useEffect(() => {
         const uploadAudio = async () => {
             if (file && status === "uploading") {
                 try {
-                    const uuid = await startMastering(file);
-                    setTaskId(uuid);
+                    const masteringId = await startMastering(file, { preset, targetLoudness, masteringLevel });
+                    setTaskId(masteringId);
                     setStatus("processing");
                 } catch (error) {
                     setStatus("error");
@@ -40,7 +45,7 @@ export function MasteringProvider({ children }) {
             }
         };
         uploadAudio();
-    }, [file, status]);
+    }, [file, status, preset, targetLoudness, masteringLevel]);
 
     // Boucle de Polling
     useEffect(() => {
@@ -48,20 +53,22 @@ export function MasteringProvider({ children }) {
 
         const pollStatus = async () => {
             try {
-                const productionData = await checkMasteringStatus(taskId);
+                const responseData = await checkMasteringStatus(taskId);
+                const masteringData = (responseData.mastering && typeof responseData.mastering === 'object') ? responseData.mastering : responseData;
 
-                if (productionData.status_string === 'Done') {
+                if (masteringData.status === 'succeeded') {
                     clearInterval(intervalId);
-                    const rawUrl = productionData.output_files[0].download_url;
-                    const authenticatedUrl = getAuthenticatedUrl(rawUrl);
+                    const outputAudioId = masteringData.output_audio_id;
+                    const authenticatedUrl = await getAuthenticatedUrl(outputAudioId);
 
                     setResultUrl(authenticatedUrl);
                     setStatus("done");
-                } else if (productionData.status_string === 'Error') {
+                } else if (masteringData.status === 'failed') {
                     clearInterval(intervalId);
                     setStatus("error");
                 }
             } catch (error) {
+                console.error("Erreur lors du polling :", error);
                 clearInterval(intervalId);
                 setStatus("error");
             }
@@ -75,6 +82,7 @@ export function MasteringProvider({ children }) {
             if (intervalId) clearInterval(intervalId);
         };
     }, [status, taskId]);
+
 
     // Fonction d'upload
     const uploadFile = (selectedFile) => {
@@ -101,6 +109,12 @@ export function MasteringProvider({ children }) {
         taskId,
         resultUrl,
         originalUrl,
+        preset,
+        setPreset,
+        targetLoudness,
+        setTargetLoudness,
+        masteringLevel,
+        setMasteringLevel,
         language: i18n.language || "fr",
         setLanguage,
         t,

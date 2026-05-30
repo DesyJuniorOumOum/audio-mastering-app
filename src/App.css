@@ -91,7 +91,7 @@ header p {
 /* Glassmorphic Container */
 .main-content {
   width: 100%;
-  max-width: 640px;
+  max-width: 900px;
   background: var(--bg-card);
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
@@ -872,4 +872,426 @@ header p {
     margin-bottom: 24px;
     justify-content: center;
   }
+}
+
+/* ==========================================================================
+   FUTURISTIC SPACE CONSOLE & TEleMETRY HUD STYLES
+   ========================================================================== */
+
+/* CRT Oscilloscope Scanline Effect Overlay */
+.crt-scanlines {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(10, 11, 16, 0.12),
+    rgba(10, 11, 16, 0.12) 1px,
+    transparent 1.5px,
+    transparent 3px
+  );
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.85;
+}
+
+/* Top HUD Grid Row */
+.top-hud-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 900px;
+  margin-bottom: 20px;
+  gap: 16px;
+  animation: fadeInDown 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@media (max-width: 768px) {
+  .top-hud-row {
+    flex-direction: column-reverse;
+    gap: 16px;
+    margin-bottom: 8px;
+  }
+}
+
+/* Telemetry Hud Bar */
+.telemetry-bar {
+  display: flex;
+  gap: 16px;
+  background: rgba(15, 16, 27, 0.55);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 8px 18px;
+  border-radius: 9999px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.25);
+}
+
+.telemetry-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.telemetry-txt {
+  font-family: var(--font-mono);
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-secondary);
+  letter-spacing: 0.08em;
+}
+
+/* Futuristic Telemetry LEDs */
+.telemetry-led {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  display: inline-block;
+  position: relative;
+}
+
+.telemetry-led.green {
+  background-color: #10b981;
+  box-shadow: 0 0 10px #10b981;
+}
+
+.telemetry-led.cyan {
+  background-color: #06b6d4;
+  box-shadow: 0 0 10px #06b6d4;
+}
+
+.telemetry-led.orange {
+  background-color: #f59e0b;
+  box-shadow: 0 0 10px #f59e0b;
+}
+
+/* LED blinking and pulse mechanics */
+.blink {
+  animation: telemetryBlink 1.8s step-end infinite;
+}
+
+.pulse {
+  animation: telemetryPulse 2s ease-in-out infinite;
+}
+
+@keyframes telemetryBlink {
+  50% { opacity: 0.2; filter: brightness(0.5); }
+}
+
+@keyframes telemetryPulse {
+  0%, 100% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  50% {
+    transform: scale(1.3);
+    opacity: 1;
+    box-shadow: 0 0 15px currentColor;
+  }
+}
+
+/* Dual Column Dashboard Layout */
+.console-dashboard {
+  display: grid;
+  grid-template-columns: 1.05fr 0.95fr;
+  gap: 28px;
+  width: 100%;
+  align-items: stretch;
+}
+
+@media (max-width: 850px) {
+  .console-dashboard {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+}
+
+/* --- Space Console Controls Panel --- */
+.console-controls-panel {
+  background: rgba(14, 15, 25, 0.65);
+  border: 1px solid rgba(255, 255, 255, 0.04);
+  border-radius: 20px;
+  padding: 24px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.4);
+  position: relative;
+  text-align: left;
+}
+
+/* Glowing mechanical borders in panel corners */
+.console-controls-panel::before {
+  content: '';
+  position: absolute;
+  top: -1px;
+  right: 20px;
+  width: 40px;
+  height: 2px;
+  background: var(--secondary);
+  box-shadow: 0 0 8px var(--secondary);
+}
+
+.console-controls-panel::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 20px;
+  width: 40px;
+  height: 2px;
+  background: var(--primary);
+  box-shadow: 0 0 8px var(--primary);
+}
+
+/* Panel Header with LED telemetry info */
+.panel-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  padding-bottom: 14px;
+  margin-bottom: 20px;
+}
+
+.panel-titles h4 {
+  font-size: 0.85rem;
+  font-weight: 800;
+  letter-spacing: 0.1em;
+  color: #fff;
+  text-transform: uppercase;
+}
+
+.panel-subtitle {
+  font-size: 0.7rem;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  display: block;
+  margin-top: 2px;
+}
+
+/* Control Group structure */
+.control-group {
+  margin-bottom: 22px;
+}
+
+.control-group:last-child {
+  margin-bottom: 0;
+}
+
+.control-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  margin-bottom: 12px;
+}
+
+.label-icon {
+  font-size: 0.9rem;
+  opacity: 0.8;
+}
+
+.control-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.control-header-row .control-label {
+  margin-bottom: 0;
+}
+
+/* Segmented Profile Toggle Switches */
+.profile-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  background: rgba(0, 0, 0, 0.2);
+  padding: 4px;
+  border-radius: 10px;
+  border: 1px solid rgba(255, 255, 255, 0.04);
+}
+
+.profile-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: var(--text-secondary);
+  font-family: var(--font-heading);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 10px 4px;
+  border-radius: 7px;
+  cursor: pointer;
+  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  outline: none;
+}
+
+.profile-dot {
+  width: 4px;
+  height: 4px;
+  background-color: var(--text-muted);
+  border-radius: 50%;
+  display: inline-block;
+  transition: all 0.25s ease;
+}
+
+.profile-btn:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.profile-btn.active {
+  background: rgba(255, 255, 255, 0.06);
+  color: #fff;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.profile-btn.active .profile-dot {
+  background-color: var(--secondary);
+  box-shadow: 0 0 8px var(--secondary);
+  transform: scale(1.5);
+}
+
+.profile-btn:nth-child(3).active .profile-dot {
+  background-color: var(--accent);
+  box-shadow: 0 0 8px var(--accent);
+}
+
+/* Futuristic Glowing Slider controls */
+.console-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 5px;
+  border-radius: 9999px;
+  outline: none;
+  margin: 12px 0;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.5);
+}
+
+/* Slider Thumb styling (Cockpit knobs) */
+.console-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  background: #fff;
+  border: 2px solid var(--secondary);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.6);
+  cursor: pointer;
+  transition: all 0.15s ease-out;
+}
+
+.console-slider::-webkit-slider-thumb:hover {
+  transform: scale(1.25);
+  box-shadow: 0 0 14px rgba(6, 182, 212, 0.9);
+}
+
+/* Purple thumb for intensity knob */
+.control-group:nth-child(3) .console-slider::-webkit-slider-thumb {
+  border-color: var(--primary);
+  box-shadow: 0 0 8px rgba(147, 51, 234, 0.6);
+}
+
+.control-group:nth-child(3) .console-slider::-webkit-slider-thumb:hover {
+  box-shadow: 0 0 14px rgba(147, 51, 234, 0.9);
+}
+
+/* Value displays badges */
+.value-badge {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 4px;
+  letter-spacing: 0.05em;
+  background: rgba(0, 0, 0, 0.3);
+}
+
+.value-badge.neon-cyan {
+  color: var(--secondary);
+  text-shadow: 0 0 8px rgba(6, 182, 212, 0.4);
+  border: 1px solid rgba(6, 182, 212, 0.2);
+}
+
+.value-badge.neon-purple {
+  color: #c084fc;
+  text-shadow: 0 0 8px rgba(168, 85, 247, 0.4);
+  border: 1px solid rgba(168, 85, 247, 0.2);
+}
+
+/* Presets layout and toggles */
+.presets-container {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 10px;
+  gap: 10px;
+}
+
+.presets-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.presets-buttons {
+  display: flex;
+  gap: 6px;
+}
+
+.preset-btn {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  color: var(--text-secondary);
+  font-family: var(--font-heading);
+  font-size: 0.65rem;
+  font-weight: 600;
+  padding: 4px 8px;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  outline: none;
+}
+
+.preset-btn:hover {
+  color: #fff;
+  border-color: rgba(255,255,255,0.15);
+}
+
+.preset-btn.active {
+  background: rgba(6, 182, 212, 0.1);
+  color: var(--secondary);
+  border-color: rgba(6, 182, 212, 0.4);
+  box-shadow: 0 0 8px rgba(6, 182, 212, 0.15);
+}
+
+/* Slider labels and ticks styling */
+.slider-ticks-labels {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.65rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  margin-top: 4px;
 }
